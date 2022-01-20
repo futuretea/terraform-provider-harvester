@@ -13,7 +13,7 @@ const (
 	URLDescription = "supports the `raw` and `qcow2` image formats which are supported by [qemu](https://www.qemu.org/docs/master/system/images.html#disk-image-file-formats). Bootable ISO images can also be used and are treated like `raw` images."
 )
 
-func Schema() map[string]*schema.Schema {
+func ResourceSchema() map[string]*schema.Schema {
 	s := map[string]*schema.Schema{
 		constants.FieldImageDisplayName: {
 			Type:         schema.TypeString,
@@ -58,6 +58,45 @@ func Schema() map[string]*schema.Schema {
 			Computed: true,
 		},
 	}
-	util.NamespacedSchemaWrap(s, false)
+	util.ResourceNamespacedSchemaWrap(s, false)
+	return s
+}
+
+func DataSourceSchema() map[string]*schema.Schema {
+	s := map[string]*schema.Schema{
+		constants.FieldImageDisplayName: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldImageURL: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldImagePVCNamespace: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldImagePVCName: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldImageSourceType: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldImageProgress: {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		constants.FieldImageSize: {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		constants.FieldImageStorageClassName: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+	util.DataSourceNamespacedSchemaWrap(s, false)
 	return s
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/harvester/terraform-provider-harvester/pkg/constants"
 )
 
-func diskSchema() map[string]*schema.Schema {
+func resourceDiskSchema() map[string]*schema.Schema {
 	s := map[string]*schema.Schema{
 		constants.FieldDiskName: {
 			Type:     schema.TypeString,
@@ -98,6 +98,68 @@ func diskSchema() map[string]*schema.Schema {
 			Optional:     true,
 			Computed:     true,
 			ValidateFunc: util.IsValidName,
+		},
+	}
+	return s
+}
+
+func dataSourceDiskSchema() map[string]*schema.Schema {
+	s := map[string]*schema.Schema{
+		constants.FieldDiskName: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldDiskType: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldDiskSize: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldDiskBus: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldDiskBootOrder: {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		constants.FieldVolumeImage: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldDiskExistingVolumeName: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldDiskContainerImageName: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldDiskAutoDelete: {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
+		constants.FieldDiskHotPlug: {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
+		constants.FieldVolumeStorageClassName: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldVolumeMode: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldVolumeAccessMode: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldDiskVolumeName: {
+			Type:     schema.TypeString,
+			Computed: true,
 		},
 	}
 	return s

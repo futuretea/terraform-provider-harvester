@@ -25,7 +25,7 @@ func ResourceKeypair() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
-		Schema: Schema(),
+		Schema: ResourceSchema(),
 	}
 }
 

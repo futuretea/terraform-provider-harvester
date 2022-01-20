@@ -7,7 +7,7 @@ import (
 	"github.com/harvester/terraform-provider-harvester/pkg/constants"
 )
 
-func Schema() map[string]*schema.Schema {
+func ResourceSchema() map[string]*schema.Schema {
 	s := map[string]*schema.Schema{
 		constants.FieldVirtualMachineMachineType: {
 			Type:     schema.TypeString,
@@ -46,7 +46,7 @@ func Schema() map[string]*schema.Schema {
 			Optional: true,
 			MaxItems: 1,
 			Elem: &schema.Resource{
-				Schema: cloudInitSchema(),
+				Schema: resourceCloudInitSchema(),
 			},
 		},
 		constants.FieldVirtualMachineDisk: {
@@ -54,7 +54,7 @@ func Schema() map[string]*schema.Schema {
 			Required: true,
 			MinItems: 1,
 			Elem: &schema.Resource{
-				Schema: diskSchema(),
+				Schema: resourceDiskSchema(),
 			},
 		},
 		constants.FieldVirtualMachineNetworkInterface: {
@@ -62,7 +62,7 @@ func Schema() map[string]*schema.Schema {
 			Required: true,
 			MinItems: 1,
 			Elem: &schema.Resource{
-				Schema: networkInterfaceSchema(),
+				Schema: resourceNetworkInterfaceSchema(),
 			},
 		},
 		constants.FieldVirtualMachineInstanceNodeName: {
@@ -70,6 +70,65 @@ func Schema() map[string]*schema.Schema {
 			Computed: true,
 		},
 	}
-	util.NamespacedSchemaWrap(s, false)
+	util.ResourceNamespacedSchemaWrap(s, false)
+	return s
+}
+
+func DataSourceSchema() map[string]*schema.Schema {
+	s := map[string]*schema.Schema{
+		constants.FieldVirtualMachineMachineType: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldVirtualMachineHostname: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldVirtualMachineStart: {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
+		constants.FieldVirtualMachineCPU: {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		constants.FieldVirtualMachineMemory: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldVirtualMachineSSHKeys: {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+		},
+		constants.FieldVirtualMachineCloudInit: {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: dataSourceCloudInitSchema(),
+			},
+		},
+		constants.FieldVirtualMachineDisk: {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: dataSourceDiskSchema(),
+			},
+		},
+		constants.FieldVirtualMachineNetworkInterface: {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: dataSourceNetworkInterfaceSchema(),
+			},
+		},
+		constants.FieldVirtualMachineInstanceNodeName: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+	util.DataSourceNamespacedSchemaWrap(s, false)
 	return s
 }

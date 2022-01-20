@@ -25,7 +25,7 @@ func ResourceImage() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
-		Schema: Schema(),
+		Schema: ResourceSchema(),
 	}
 }
 

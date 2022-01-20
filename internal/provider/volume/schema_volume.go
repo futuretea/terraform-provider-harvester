@@ -9,7 +9,7 @@ import (
 	"github.com/harvester/terraform-provider-harvester/pkg/constants"
 )
 
-func Schema() map[string]*schema.Schema {
+func ResourceSchema() map[string]*schema.Schema {
 	s := map[string]*schema.Schema{
 		constants.FieldVolumeSize: {
 			Type:     schema.TypeString,
@@ -54,6 +54,41 @@ func Schema() map[string]*schema.Schema {
 			Computed: true,
 		},
 	}
-	util.NamespacedSchemaWrap(s, false)
+	util.ResourceNamespacedSchemaWrap(s, false)
+	return s
+}
+
+func DataSourceSchema() map[string]*schema.Schema {
+	s := map[string]*schema.Schema{
+		constants.FieldVolumeSize: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldVolumeImage: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldVolumeStorageClassName: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldVolumeMode: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldVolumeAccessMode: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldVolumeAttachedVM: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldPhase: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+	util.DataSourceNamespacedSchemaWrap(s, false)
 	return s
 }

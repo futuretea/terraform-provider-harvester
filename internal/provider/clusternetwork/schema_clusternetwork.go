@@ -7,7 +7,7 @@ import (
 	"github.com/harvester/terraform-provider-harvester/pkg/constants"
 )
 
-func Schema() map[string]*schema.Schema {
+func ResourceSchema() map[string]*schema.Schema {
 	s := map[string]*schema.Schema{
 		constants.FieldClusterNetworkEnable: {
 			Type:     schema.TypeBool,
@@ -18,6 +18,21 @@ func Schema() map[string]*schema.Schema {
 			Optional: true,
 		},
 	}
-	util.NonNamespacedSchemaWrap(s)
+	util.ResourceNonNamespacedSchemaWrap(s)
+	return s
+}
+
+func DataSourceSchema() map[string]*schema.Schema {
+	s := map[string]*schema.Schema{
+		constants.FieldClusterNetworkEnable: {
+			Type:     schema.TypeBool,
+			Computed: true,
+		},
+		constants.FieldClusterNetworkDefaultPhysicalNIC: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+	util.DataSourceNonNamespacedSchemaWrap(s)
 	return s
 }

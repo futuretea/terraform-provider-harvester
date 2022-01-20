@@ -8,7 +8,7 @@ import (
 	"github.com/harvester/terraform-provider-harvester/pkg/constants"
 )
 
-func networkInterfaceSchema() map[string]*schema.Schema {
+func resourceNetworkInterfaceSchema() map[string]*schema.Schema {
 	s := map[string]*schema.Schema{
 		constants.FiledNetworkInterfaceName: {
 			Type:     schema.TypeString,
@@ -53,6 +53,40 @@ func networkInterfaceSchema() map[string]*schema.Schema {
 		constants.FiledNetworkInterfaceNetworkName: {
 			Type:     schema.TypeString,
 			Optional: true,
+		},
+	}
+	return s
+}
+
+func dataSourceNetworkInterfaceSchema() map[string]*schema.Schema {
+	s := map[string]*schema.Schema{
+		constants.FiledNetworkInterfaceName: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FiledNetworkInterfaceType: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FiledNetworkInterfaceModel: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FiledNetworkInterfaceMACAddress: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FiledNetworkInterfaceIPAddress: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FiledNetworkInterfaceInterfaceName: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FiledNetworkInterfaceNetworkName: {
+			Type:     schema.TypeString,
+			Computed: true,
 		},
 	}
 	return s

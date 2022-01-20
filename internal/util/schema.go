@@ -9,12 +9,12 @@ import (
 	"github.com/harvester/terraform-provider-harvester/pkg/constants"
 )
 
-func NamespacedSchemaWrap(s map[string]*schema.Schema, system bool) {
+func ResourceNamespacedSchemaWrap(s map[string]*schema.Schema, system bool) {
 	var namespace = constants.NamespaceDefault
 	if system {
 		namespace = constants.NamespaceHarvesterSystem
 	}
-	NonNamespacedSchemaWrap(s)
+	ResourceNonNamespacedSchemaWrap(s)
 	s[constants.FieldCommonNamespace] = &schema.Schema{
 		Type:         schema.TypeString,
 		ForceNew:     true,
@@ -24,7 +24,7 @@ func NamespacedSchemaWrap(s map[string]*schema.Schema, system bool) {
 	}
 }
 
-func NonNamespacedSchemaWrap(s map[string]*schema.Schema) {
+func ResourceNonNamespacedSchemaWrap(s map[string]*schema.Schema) {
 	s[constants.FieldCommonName] = &schema.Schema{
 		Type:         schema.TypeString,
 		Required:     true,
@@ -40,6 +40,41 @@ func NonNamespacedSchemaWrap(s map[string]*schema.Schema) {
 	s[constants.FieldCommonTags] = &schema.Schema{
 		Type:     schema.TypeMap,
 		Optional: true,
+	}
+	s[constants.FieldCommonState] = &schema.Schema{
+		Type:     schema.TypeString,
+		Computed: true,
+	}
+}
+
+func DataSourceNamespacedSchemaWrap(s map[string]*schema.Schema, system bool) {
+	var namespace = constants.NamespaceDefault
+	if system {
+		namespace = constants.NamespaceHarvesterSystem
+	}
+	DataSourceNonNamespacedSchemaWrap(s)
+	s[constants.FieldCommonNamespace] = &schema.Schema{
+		Type:         schema.TypeString,
+		Optional:     true,
+		Default:      namespace,
+		ValidateFunc: IsValidName,
+	}
+}
+
+func DataSourceNonNamespacedSchemaWrap(s map[string]*schema.Schema) {
+	s[constants.FieldCommonName] = &schema.Schema{
+		Type:         schema.TypeString,
+		Required:     true,
+		ValidateFunc: IsValidName,
+		Description:  "A unique name",
+	}
+	s[constants.FieldCommonDescription] = &schema.Schema{
+		Type:     schema.TypeString,
+		Computed: true,
+	}
+	s[constants.FieldCommonTags] = &schema.Schema{
+		Type:     schema.TypeMap,
+		Computed: true,
 	}
 	s[constants.FieldCommonState] = &schema.Schema{
 		Type:     schema.TypeString,

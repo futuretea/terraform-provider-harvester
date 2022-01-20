@@ -8,7 +8,7 @@ import (
 	"github.com/harvester/terraform-provider-harvester/pkg/constants"
 )
 
-func cloudInitSchema() map[string]*schema.Schema {
+func resourceCloudInitSchema() map[string]*schema.Schema {
 	s := map[string]*schema.Schema{
 		constants.FieldCloudInitType: {
 			Type:     schema.TypeString,
@@ -42,6 +42,40 @@ func cloudInitSchema() map[string]*schema.Schema {
 		constants.FieldCloudInitUserDataSecretName: {
 			Type:     schema.TypeString,
 			Optional: true,
+		},
+	}
+	return s
+}
+
+func dataSourceCloudInitSchema() map[string]*schema.Schema {
+	s := map[string]*schema.Schema{
+		constants.FieldCloudInitType: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldCloudInitNetworkData: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldCloudInitNetworkDataBase64: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldCloudInitNetworkDataSecretName: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldCloudInitUserData: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldCloudInitUserDataBase64: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldCloudInitUserDataSecretName: {
+			Type:     schema.TypeString,
+			Computed: true,
 		},
 	}
 	return s

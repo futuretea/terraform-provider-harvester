@@ -8,7 +8,7 @@ import (
 	"github.com/harvester/terraform-provider-harvester/pkg/constants"
 )
 
-func Schema() map[string]*schema.Schema {
+func ResourceSchema() map[string]*schema.Schema {
 	s := map[string]*schema.Schema{
 		constants.FieldNetworkVlanID: {
 			Type:         schema.TypeInt,
@@ -22,6 +22,21 @@ func Schema() map[string]*schema.Schema {
 			Computed: true,
 		},
 	}
-	util.NamespacedSchemaWrap(s, false)
+	util.ResourceNamespacedSchemaWrap(s, false)
+	return s
+}
+
+func DataSourceSchema() map[string]*schema.Schema {
+	s := map[string]*schema.Schema{
+		constants.FieldNetworkVlanID: {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+		constants.FieldNetworkConfig: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+	util.DataSourceNamespacedSchemaWrap(s, false)
 	return s
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/harvester/terraform-provider-harvester/pkg/constants"
 )
 
-func Schema() map[string]*schema.Schema {
+func ResourceSchema() map[string]*schema.Schema {
 	s := map[string]*schema.Schema{
 		constants.FieldKeyPairPublicKey: {
 			Type:         schema.TypeString,
@@ -20,6 +20,21 @@ func Schema() map[string]*schema.Schema {
 			Computed: true,
 		},
 	}
-	util.NamespacedSchemaWrap(s, false)
+	util.ResourceNamespacedSchemaWrap(s, false)
+	return s
+}
+
+func DataSourceSchema() map[string]*schema.Schema {
+	s := map[string]*schema.Schema{
+		constants.FieldKeyPairPublicKey: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		constants.FieldKeyPairFingerPrint: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	}
+	util.DataSourceNamespacedSchemaWrap(s, false)
 	return s
 }
