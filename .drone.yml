@@ -1,16 +1,30 @@
 ---
 kind: pipeline
-name: amd64
+name: default
 
 platform:
   os: linux
   arch: amd64
 
 steps:
+- name: release_binary
+  image: rancher/dapper:v0.5.8
+  commands:
+    - dapper release-binary
+  environment:
+    GITHUB_TOKEN:
+      from_secret: github_token
+    GPG_FINGERPRINT:
+      from_secret: gpg_fingerprint
+  volumes:
+    - name: docker
+      path: /var/run/docker.sock
+  when:
+    event: tag
 - name: build
   image: rancher/dapper:v0.5.8
   commands:
-  - dapper precheck
+  - dapper ci
   volumes:
   - name: docker
     path: /var/run/docker.sock
@@ -46,30 +60,6 @@ steps:
     event:
     - push
 
-- name: docker-publish
-  image: plugins/docker
-  settings:
-    build_args:
-    - ARCH=amd64
-    - "VERSION=${DRONE_TAG}"
-    context: package/
-    custom_dns: 1.1.1.1
-    dockerfile: package/Dockerfile
-    password:
-      from_secret: docker_password
-    repo: "rancher/terraform-provider-harvester"
-    tag: "${DRONE_TAG}-amd64"
-    username:
-      from_secret: docker_username
-  when:
-    instance:
-    - drone-publish.rancher.io
-    ref:
-    - refs/head/master
-    - refs/tags/*
-    event:
-    - tag
-
 volumes:
 - name: docker
   host:
@@ -103,25 +93,5 @@ steps:
     event:
     - push
 
-- name: manifest
-  image: plugins/manifest
-  settings:
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-    platforms:
-      - linux/amd64
-    target: "rancher/terraform-provider-harvester:${DRONE_TAG}"
-    template: "rancher/terraform-provider-harvester:${DRONE_TAG}-ARCH"
-  when:
-    instance:
-    - drone-publish.rancher.io
-    ref:
-    - refs/head/master
-    - refs/tags/*
-    event:
-    - tag
-
 depends_on:
-- amd64
+- default

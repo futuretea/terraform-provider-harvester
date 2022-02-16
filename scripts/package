@@ -11,12 +11,6 @@ else
   PROVIDER_VERSION=${VERSION#"v"}
 fi
 
-TAG=${TAG:-${VERSION}${SUFFIX}}
-
-if echo $TAG | grep -q dirty; then
-    TAG=dev
-fi
-
 mkdir -p dist/artifacts
 cp bin/terraform-provider-harvester dist/artifacts/terraform-provider-harvester${SUFFIX}
 
