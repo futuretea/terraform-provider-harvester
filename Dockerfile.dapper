@@ -15,7 +15,7 @@ RUN if [ "${ARCH}" = "amd64" ]; then \
 ## install goreleaser
 RUN GO111MODULE=on go get github.com/goreleaser/goreleaser@v1.5.0
 
-ENV DAPPER_ENV REPO TAG DRONE_TAG CROSS GITHUB_TOKEN GPG_PRIVATE_KEY GPG_PASSPHRASE
+ENV DAPPER_ENV REPO TAG DRONE_TAG CROSS GITHUB_TOKEN GPG_FINGERPRINT
 ENV DAPPER_SOURCE /go/src/github.com/harvester/terraform-provider-harvester
 ENV DAPPER_OUTPUT ./bin ./dist
 ENV DAPPER_DOCKER_SOCKET true
