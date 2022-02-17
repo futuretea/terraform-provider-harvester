@@ -13,8 +13,6 @@ linters:
     - unused
     - unparam
     - ineffassign
-    - scopelint
-    - maligned
     - prealloc
     - stylecheck
     - goconst
