@@ -8,7 +8,7 @@ cd $(dirname $0)/..
 if [ "${GIT_TAG}" != "${VERSION}" ]; then
   PROVIDER_VERSION="0.0.0-master"
 else
-  PROVIDER_VERSION=$(echo $VERSION | sed "s/^[v|V]//")
+  PROVIDER_VERSION=${VERSION/[v|V]/}
 fi
 
 cd $(dirname $0)/package
