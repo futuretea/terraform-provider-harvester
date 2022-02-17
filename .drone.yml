@@ -79,21 +79,11 @@ steps:
   volumes:
   - name: docker
     path: /var/run/docker.sock
-  when:
-    event:
-    - push
-    - pull_request
 
 - name: stage-binaries
   image: rancher/dapper:v0.5.8
   commands:
   - "cp -r ./bin/terraform-provider-harvester ./package/"
-  when:
-    ref:
-      include:
-      - "refs/heads/master"
-    event:
-    - push
 
 - name: docker-publish-master
   image: plugins/docker
@@ -107,14 +97,9 @@ steps:
       from_secret: docker_username
     password:
       from_secret: docker_password
-    repo: "rancher/terraform-provider-harvester"
+    repo: "harbor.futuretea.me/rancher/terraform-provider-harvester"
+    registry: harbor.futuretea.me
     tag: ${DRONE_BRANCH}-head-amd64
-  when:
-    ref:
-      include:
-      - "refs/heads/master"
-    event:
-    - push
 
 volumes:
 - name: docker
@@ -139,14 +124,8 @@ steps:
       from_secret: docker_password
     platforms:
     - linux/amd64
-    target: "rancher/terraform-provider-harvester:${DRONE_BRANCH}-head"
-    template: "rancher/terraform-provider-harvester:${DRONE_BRANCH}-head-ARCH"
-  when:
-    ref:
-      include:
-      - "refs/heads/master"
-    event:
-    - push
+    target: "harbor.futuretea.me/rancher/terraform-provider-harvester:${DRONE_BRANCH}-head"
+    template: "harbor.futuretea.me/rancher/terraform-provider-harvester:${DRONE_BRANCH}-head-ARCH"
 
 depends_on:
 - default
