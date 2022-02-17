@@ -16,8 +16,6 @@ steps:
   volumes:
     - name: docker
       path: /var/run/docker.sock
-  when:
-    event: tag
 
 - name: gpg-sign-release
   image: plugins/gpgsign
@@ -30,8 +28,6 @@ steps:
       - dist/artifacts/${DRONE_TAG}/terraform-provider-harvester_*_SHA256SUMS
     detach_sign: true
     armor: false
-  when:
-    event: tag
 
 - name: github-binary-prerelease
   image: plugins/github-release
@@ -53,10 +49,6 @@ steps:
       - dist/artifacts/${DRONE_TAG}/terraform-provider-harvester_*
     api_key:
       from_secret: github_token
-  when:
-    event: tag
-    ref:
-      exclude: [ refs/tags/*rc* ]
 
 - name: build
   image: rancher/dapper:v0.5.8
@@ -70,9 +62,6 @@ steps:
   image: rancher/dapper:v0.5.8
   commands:
   - "cp -r ./bin/terraform-provider-harvester ./package/"
-  when:
-    event:
-    - push
 
 - name: docker-publish-master
   image: plugins/docker
@@ -88,14 +77,6 @@ steps:
       from_secret: docker_password
     repo: "rancher/terraform-provider-harvester"
     tag: ${DRONE_BRANCH}-head-amd64
-
-  when:
-    ref:
-      include:
-      - "refs/heads/master"
-      - "refs/heads/v*"
-    event:
-    - push
 
 volumes:
 - name: docker
@@ -122,13 +103,6 @@ steps:
     - linux/amd64
     target: "rancher/terraform-provider-harvester:${DRONE_BRANCH}-head"
     template: "rancher/terraform-provider-harvester:${DRONE_BRANCH}-head-ARCH"
-  when:
-    ref:
-      include:
-      - "refs/heads/master"
-      - "refs/heads/v*"
-    event:
-    - push
 
 depends_on:
 - default
