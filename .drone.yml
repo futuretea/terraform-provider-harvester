@@ -7,17 +7,26 @@ platform:
   arch: amd64
 
 steps:
+- name: fetch
+  image: alpine/git
+  commands:
+  - git fetch --tags
+  when:
+    event:
+    - tag
+
 - name: build-release-binary
   image: rancher/dapper:v0.5.8
   environment:
     CROSS: 1
   commands:
-    - dapper ci
+  - dapper ci
   volumes:
-    - name: docker
-      path: /var/run/docker.sock
+  - name: docker
+    path: /var/run/docker.sock
   when:
-    event: tag
+    event:
+    - tag
 
 - name: gpg-sign-release
   image: plugins/gpgsign
@@ -27,36 +36,41 @@ steps:
     passphrase:
       from_secret: gpg_passphrase
     files:
-      - dist/artifacts/${DRONE_TAG}/terraform-provider-harvester_*_SHA256SUMS
+    - dist/artifacts/terraform-provider-harvester_*_SHA256SUMS
     detach_sign: true
     armor: false
   when:
-    event: tag
+    event:
+    - tag
 
 - name: github-binary-prerelease
   image: plugins/github-release
   settings:
     prerelease: true
     files:
-      - dist/artifacts/${DRONE_TAG}/terraform-provider-harvester_*
+    - dist/artifacts/terraform-provider-harvester_*
     api_key:
       from_secret: github_token
   when:
-    event: tag
     ref:
-      include: [ refs/tags/*rc* ]
+      include:
+      - "refs/tags/*rc*"
+    event:
+    - tag
 
 - name: github-binary-release
   image: plugins/github-release
   settings:
     files:
-      - dist/artifacts/${DRONE_TAG}/terraform-provider-harvester_*
+    - dist/artifacts/terraform-provider-harvester_*
     api_key:
       from_secret: github_token
   when:
-    event: tag
     ref:
-      exclude: [ refs/tags/*rc* ]
+      exclude:
+      - "refs/tags/*rc*"
+    event:
+    - tag
 
 - name: build
   image: rancher/dapper:v0.5.8
@@ -65,12 +79,19 @@ steps:
   volumes:
   - name: docker
     path: /var/run/docker.sock
+  when:
+    event:
+    - push
+    - pull_request
 
 - name: stage-binaries
   image: rancher/dapper:v0.5.8
   commands:
   - "cp -r ./bin/terraform-provider-harvester ./package/"
   when:
+    ref:
+      include:
+      - "refs/heads/master"
     event:
     - push
 
@@ -88,12 +109,10 @@ steps:
       from_secret: docker_password
     repo: "rancher/terraform-provider-harvester"
     tag: ${DRONE_BRANCH}-head-amd64
-
   when:
     ref:
       include:
       - "refs/heads/master"
-      - "refs/heads/v*"
     event:
     - push
 
@@ -126,7 +145,6 @@ steps:
     ref:
       include:
       - "refs/heads/master"
-      - "refs/heads/v*"
     event:
     - push
 
