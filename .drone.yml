@@ -11,9 +11,6 @@ steps:
   image: alpine/git
   commands:
     - git fetch --tags
-  when:
-    event:
-      - tag
 
 - name: build-release-binary
   image: rancher/dapper:v0.5.8
@@ -24,9 +21,6 @@ steps:
   volumes:
     - name: docker
       path: /var/run/docker.sock
-  when:
-    event:
-      - tag
 
 - name: gpg-sign-release
   image: plugins/gpgsign
@@ -39,9 +33,6 @@ steps:
       - dist/artifacts/terraform-provider-harvester_*_SHA256SUMS
     detach_sign: true
     armor: false
-  when:
-    event:
-      - tag
 
 - name: github-binary-prerelease
   image: plugins/github-release
@@ -65,12 +56,6 @@ steps:
       - dist/artifacts/terraform-provider-harvester_*
     api_key:
       from_secret: github_token
-  when:
-    ref:
-      exclude:
-        - "refs/tags/*rc*"
-    event:
-      - tag
 
 - name: build
   image: rancher/dapper:v0.5.8
