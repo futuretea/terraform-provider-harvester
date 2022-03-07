@@ -1,9 +1,10 @@
-FROM golang:1.16.5-alpine3.13
+FROM registry.suse.com/bci/golang:1.16
 
 ARG DAPPER_HOST_ARCH
 ENV ARCH $DAPPER_HOST_ARCH
 
-RUN apk update && apk -U add bash git gcc musl-dev docker vim less file curl wget ca-certificates zip perl-utils
+RUN zypper -n rm container-suseconnect && \
+    zypper -n install git curl docker gzip tar wget awk zip
 
 # install goimports
 RUN GO111MODULE=on go get golang.org/x/tools/cmd/goimports@v0.1.9
